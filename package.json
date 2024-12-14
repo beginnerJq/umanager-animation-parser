@@ -1,0 +1,13 @@
+{
+  "name": "umanager-animation-parser",
+  "description": "动画解析",
+  "version": "0.0.1",
+  "main": "./AnimationParser.ts",
+  "peerDependencies": {
+    "three": ">0.170.0",
+    "soonspacejs": ">=2.11.x"
+  },
+  "dependencies": {
+    "@types/three": "^0.170.0"
+  }
+}
