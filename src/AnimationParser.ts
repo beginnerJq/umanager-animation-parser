@@ -1,26 +1,13 @@
 import { EventDispatcher, Object3D } from 'three';
-import { Tween } from 'three/examples/jsm/libs/tween.module.js';
 import SoonSpace, { AnimationModeType, IVector3 } from 'soonspacejs';
+import { TAnimationFrame, TEventMap, TTransformObject, TTweenSource, TTweenType } from './types';
 
 const { animation } = SoonSpace;
 
 const initialTransformSymbol = Symbol('initialTransform');
 
-export type AnimationFrame = {
-  position: IVector3;
-  rotation: IVector3;
-  scale: IVector3;
-  duration: number;
-  delay: number;
-  repeat: number;
-  yoyo: boolean;
-  easing: AnimationModeType;
-};
-
-export type TransformObject = Pick<AnimationFrame, 'position' | 'rotation' | 'scale'>;
-
-class AnimationPlayer extends EventDispatcher<{ update: object }> {
-  tweenSet: Set<Tween<any>> = new Set();
+class AnimationPlayer extends EventDispatcher<TEventMap> {
+  tweenSet: Set<TTweenType> = new Set();
 
   constructor(readonly ssp: SoonSpace, readonly target: Object3D) {
     super();
@@ -34,25 +21,25 @@ class AnimationPlayer extends EventDispatcher<{ update: object }> {
         position: position.clone(),
         rotation: rotation.clone(),
         scale: scale.clone(),
-      } satisfies TransformObject;
+      } satisfies TTransformObject;
       Reflect.set(this.target, initialTransformSymbol, transformObject);
     }
   }
 
-  getInitialTransform(): TransformObject | undefined {
+  getInitialTransform(): TTransformObject | undefined {
     return Reflect.get(this.target, initialTransformSymbol);
   }
 
-  async play(frames: AnimationFrame[]) {
+  async play(frames: TAnimationFrame[]) {
     this.initTransform();
 
-    const initialTransform = this.getInitialTransform() as TransformObject;
+    const initialTransform = this.getInitialTransform() as TTransformObject;
 
     /**
      * 执行动画
      */
     for (let j = 0; j < frames.length; j++) {
-      let currentFrame: TransformObject = frames[j - 1];
+      let currentFrame: TTransformObject = frames[j - 1];
 
       if (!currentFrame) {
         currentFrame = initialTransform;
@@ -77,7 +64,7 @@ class AnimationPlayer extends EventDispatcher<{ update: object }> {
 
       const yoyo = nextFrame.yoyo ?? false;
 
-      await animation(
+      await animation<TTweenSource>(
         {
           positionX: sourcePosition.x,
           positionY: sourcePosition.y,
@@ -101,14 +88,16 @@ class AnimationPlayer extends EventDispatcher<{ update: object }> {
           scaleZ: targetScale.z,
         },
         { delay, duration, mode, repeat, yoyo },
-        ({ positionX, positionY, positionZ, rotationX, rotationY, rotationZ, scaleX, scaleY, scaleZ }) => {
+        (source, tween) => {
+          const { positionX, positionY, positionZ, rotationX, rotationY, rotationZ, scaleX, scaleY, scaleZ } = source;
           this.target.position.set(positionX, positionY, positionZ);
           this.target.rotation.set(rotationX, rotationY, rotationZ);
           this.target.scale.set(scaleX, scaleY, scaleZ);
-          this.dispatchEvent({ type: 'update' });
+          this.dispatchEvent({ type: 'update', source, tween });
         },
         (tween) => {
           this.tweenSet.add(tween);
+          this.dispatchEvent({ type: 'start', tween });
         }
       );
     }
