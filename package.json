@@ -1,14 +1,14 @@
 {
   "name": "umanager-animation-parser",
   "description": "动画解析",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "module": "./dist/index.js",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
+      "import": "./dist/index.js",
       "types": "./dist/types/index.d.ts"
     }
   },
