@@ -1,16 +1,22 @@
 # umanager-animation-parser
 
-## usage
+## Installation
+
+```sh
+pnpm i umanager-animation-parser
+```
+
+## Usage
 
 ```ts
 const player = new AnimationPlayer(ssp, target);
 ```
 
-## properties
+## Properties
 
 ### tweenSet
 
-## methods
+## Methods
 
 ### play
 
