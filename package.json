@@ -1,7 +1,7 @@
 {
   "name": "umanager-animation-parser",
   "description": "动画解析",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "module": "./dist/index.js",
   "main": "./dist/index.js",
@@ -17,7 +17,7 @@
   },
   "peerDependencies": {
     "soonspacejs": ">=2.11.x",
-    "three": ">0.170.0"
+    "three": ">=0.169.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.0",

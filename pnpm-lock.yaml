@@ -12,7 +12,7 @@ importers:
         specifier: '>=2.11.x'
         version: 2.11.67(camera-controls@2.9.0(three@0.171.0))(three-mesh-bvh@0.8.3(three@0.171.0))(three@0.171.0)
       three:
-        specifier: '>0.170.0'
+        specifier: '>=0.169.0'
         version: 0.171.0
     devDependencies:
       '@rollup/plugin-node-resolve':
