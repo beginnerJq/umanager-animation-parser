@@ -41,3 +41,9 @@ player.reset()
 ```
 player.dispose()
 ```
+
+## Events
+
+### update
+
+### start
