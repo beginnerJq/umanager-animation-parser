@@ -15,9 +15,9 @@ export type TAnimationFrame = {
 export type TTransformObject = Pick<TAnimationFrame, 'position' | 'rotation' | 'scale'>;
 
 export type TTweenSource = {
-  positionX: number;
-  positionY: number;
-  positionZ: number;
+  x: number;
+  y: number;
+  z: number;
   rotationX: number;
   rotationY: number;
   rotationZ: number;

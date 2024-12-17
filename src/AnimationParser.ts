@@ -1,5 +1,5 @@
 import { EventDispatcher, Object3D } from 'three';
-import SoonSpace, { AnimationModeType, IVector3 } from 'soonspacejs';
+import SoonSpace from 'soonspacejs';
 import { TAnimationFrame, TEventMap, TTransformObject, TTweenSource, TTweenType } from './types';
 
 const { animation } = SoonSpace;
@@ -47,16 +47,16 @@ class AnimationPlayer extends EventDispatcher<TEventMap> {
 
       const nextFrame = frames[j];
 
-      const sourcePosition = currentFrame.position as IVector3,
-        sourceRotation = currentFrame.rotation as IVector3,
-        sourceScale = currentFrame.scale as IVector3;
-      const targetPosition = nextFrame.position as IVector3,
-        targetRotation = nextFrame.rotation as IVector3,
-        targetScale = nextFrame.scale as IVector3;
+      const sourcePosition = currentFrame.position,
+        sourceRotation = currentFrame.rotation,
+        sourceScale = currentFrame.scale;
+      const targetPosition = nextFrame.position,
+        targetRotation = nextFrame.rotation,
+        targetScale = nextFrame.scale;
 
       const delay = nextFrame.delay ?? 0;
       const duration = nextFrame.duration ?? 1000;
-      const mode = nextFrame.easing as AnimationModeType;
+      const mode = nextFrame.easing;
       /**
        * -1 表示无限循环
        */
@@ -66,9 +66,9 @@ class AnimationPlayer extends EventDispatcher<TEventMap> {
 
       await animation<TTweenSource>(
         {
-          positionX: sourcePosition.x,
-          positionY: sourcePosition.y,
-          positionZ: sourcePosition.z,
+          x: sourcePosition.x,
+          y: sourcePosition.y,
+          z: sourcePosition.z,
           rotationX: sourceRotation.x,
           rotationY: sourceRotation.y,
           rotationZ: sourceRotation.z,
@@ -77,9 +77,9 @@ class AnimationPlayer extends EventDispatcher<TEventMap> {
           scaleZ: sourceScale.z,
         },
         {
-          positionX: targetPosition.x,
-          positionY: targetPosition.y,
-          positionZ: targetPosition.z,
+          x: targetPosition.x,
+          y: targetPosition.y,
+          z: targetPosition.z,
           rotationX: targetRotation.x,
           rotationY: targetRotation.y,
           rotationZ: targetRotation.z,
@@ -89,8 +89,8 @@ class AnimationPlayer extends EventDispatcher<TEventMap> {
         },
         { delay, duration, mode, repeat, yoyo },
         (source, tween) => {
-          const { positionX, positionY, positionZ, rotationX, rotationY, rotationZ, scaleX, scaleY, scaleZ } = source;
-          this.target.position.set(positionX, positionY, positionZ);
+          const { x, y, z, rotationX, rotationY, rotationZ, scaleX, scaleY, scaleZ } = source;
+          this.target.position.set(x, y, z);
           this.target.rotation.set(rotationX, rotationY, rotationZ);
           this.target.scale.set(scaleX, scaleY, scaleZ);
           this.dispatchEvent({ type: 'update', source, tween });
