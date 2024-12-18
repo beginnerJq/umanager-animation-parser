@@ -1,7 +1,7 @@
 {
   "name": "umanager-animation-parser",
   "description": "动画解析",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "module": "./dist/index.js",
   "main": "./dist/index.js",

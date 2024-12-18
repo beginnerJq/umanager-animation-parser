@@ -13,17 +13,19 @@ class AnimationPlayer extends EventDispatcher<TEventMap> {
     super();
   }
 
-  initTransform() {
+  initTransform(defaultTransform?: TTransformObject): TTransformObject {
     const { position, rotation, scale } = this.target;
 
-    if (!Reflect.has(this.target, initialTransformSymbol)) {
-      const transformObject = {
+    const transformObject =
+      defaultTransform ??
+      ({
         position: position.clone(),
         rotation: rotation.clone(),
         scale: scale.clone(),
-      } satisfies TTransformObject;
-      Reflect.set(this.target, initialTransformSymbol, transformObject);
-    }
+      } satisfies TTransformObject);
+    Reflect.set(this.target, initialTransformSymbol, transformObject);
+
+    return transformObject;
   }
 
   getInitialTransform(): TTransformObject | undefined {
@@ -31,9 +33,10 @@ class AnimationPlayer extends EventDispatcher<TEventMap> {
   }
 
   async play(frames: TAnimationFrame[]) {
-    this.initTransform();
-
-    const initialTransform = this.getInitialTransform() as TTransformObject;
+    let initialTransform = this.getInitialTransform() as TTransformObject;
+    if (!initialTransform) {
+      initialTransform = this.initTransform();
+    }
 
     /**
      * 执行动画
